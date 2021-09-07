@@ -58,6 +58,8 @@ while True:
     except ValueError:
         print("Anda harus mengisi bilangan bulat")
 
+print("Maka pendapatan anda per minggu adalah Rp" + str(totalGaji(jamKerja)) + ".")
+
 while True:
     try:
         pengeluaran = int(
@@ -68,6 +70,5 @@ while True:
             break
     except OutOfRangeLowerBoundError:
         print("Anda tidak dapat memasukkan angka negatif")
-
-print("Maka pendapatan anda per minggu adalah Rp" + str(totalGaji(jamKerja)) + ".")
+        
 print(tabungan(pengeluaran, totalGaji(jamKerja)))
