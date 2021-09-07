@@ -18,8 +18,14 @@ class OutOfRangeUpperBoundError(Error):
 def totalGaji(jam):
     ambangMinimumLembur = 40
     gajiTotal = 0
-
-    if jam > ambangMinimumLembur:
+    
+    if type(jam) != int:
+        raise TypeError("Nilai jam kerja harus bilangan bulat")
+    if jam < 0:
+        raise OutOfRangeLowerBoundError("Nilai jam kerja tidak boleh negatif")
+    elif jam > 168:
+        raise OutOfRangeUpperBoundError("Batas maksimum jam kerja adalah 168 jam")
+    elif jam > ambangMinimumLembur:
         gajiNormal = ambangMinimumLembur * 15000
         gajiLembur = (jam - ambangMinimumLembur) * 15000 * 150 / 100
         gajiTotal = int(gajiNormal + gajiLembur)
@@ -29,46 +35,42 @@ def totalGaji(jam):
     return gajiTotal
 
 
-def tabungan(pengeluaran, gaji):
+def tabungan(jam, pengeluaran):
     pesan = ""
+    gajiTotal = totalGaji(jam)
 
-    if pengeluaran > gaji:
-        pesan = "Namun pengeluaran anda lebih besar daripada pendapatan sebanyak Rp" + str(-(gaji - pengeluaran)) + ". Sebaiknya anda mencari tambahan pekerjaan lain."
-    elif pengeluaran == gaji:
-        pesan = "Pengeluaran dan pendapatan anda sama besar sehingga anda tidak dapat menabung."
+    if type(pengeluaran) != int:
+        raise TypeError("Nilai pengeluaran harus bilangan bulat")
+    elif pengeluaran < 0:
+        raise OutOfRangeLowerBoundError("Nilai pengeluaran tidak boleh negatif")
+    elif pengeluaran > gajiTotal:
+        pesan = "Cari tambahan pekerjaan lain."
+    elif pengeluaran == gajiTotal:
+        pesan = "Anda tidak dapat menabung."
     else:
-        pesan = "Pendapatan anda melebihi pengeluaran anda sehingga anda dapat menabung sebesar Rp" + str(gaji - pengeluaran) + " tiap minggunya."
+        pesan = "Dapat menabung sebesar Rp" + str(gajiTotal - pengeluaran) + "."
     
     return pesan
 
 # Main Program
-while True:
-    try:
-        jamKerja = int(input("Masukkan jumlah jam kerja tiap minggunya: "))
-        if jamKerja < 0:
-            raise OutOfRangeLowerBoundError
-        elif jamKerja > 168:
-            raise OutOfRangeUpperBoundError
-        else:
-            break
-    except OutOfRangeLowerBoundError:
-        print("Anda tidak dapat memasukkan angka negatif")
-    except OutOfRangeUpperBoundError:
-        print("Dalam satu minggu hanya terdapat 168 jam")
-    except ValueError:
-        print("Anda harus mengisi bilangan bulat")
+if __name__ == "__main__":
 
-print("Maka pendapatan anda per minggu adalah Rp" + str(totalGaji(jamKerja)) + ".")
-
-while True:
-    try:
-        pengeluaran = int(
-            input("Masukkan jumlah pengeluaran anda tiap minggunya: Rp"))
-        if pengeluaran < 0:
-            raise OutOfRangeLowerBoundError
-        else:
+    jamKerja = 0
+    pengeluaran = 0
+    
+    while True:
+        try:
+            jamKerja = int(input("Masukkan jumlah jam kerja tiap minggunya: "))
+            print("Maka pendapatan anda per minggu adalah Rp" + str(totalGaji(jamKerja)) + ".")
             break
-    except OutOfRangeLowerBoundError:
-        print("Anda tidak dapat memasukkan angka negatif")
-        
-print(tabungan(pengeluaran, totalGaji(jamKerja)))
+        except OutOfRangeLowerBoundError as e: print(e)
+        except OutOfRangeUpperBoundError as e: print(e)
+        except ValueError: print("Nilai jam kerja harus bilangan bulat")
+
+    while True:
+        try:
+            pengeluaran = int(input("Masukkan jumlah pengeluaran anda tiap minggunya: Rp"))
+            print(tabungan(jamKerja, pengeluaran))
+            break
+        except OutOfRangeLowerBoundError as e: print(e)
+        except ValueError: print("Nilai pengeluaran harus bilangan bulat")
