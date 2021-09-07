@@ -17,23 +17,29 @@ class OutOfRangeUpperBoundError(Error):
 # Functions
 def totalGaji(jam):
     ambangMinimumLembur = 40
+    gajiTotal = 0
 
     if jam > ambangMinimumLembur:
         gajiNormal = ambangMinimumLembur * 15000
-        gajiLembur = (jam - ambangMinimumLembur) * 15000 * 1.5
-        return gajiNormal + gajiLembur
+        gajiLembur = (jam - ambangMinimumLembur) * 15000 * 150 / 100
+        gajiTotal = int(gajiNormal + gajiLembur)
     else:
-        gaji = jam * 15000
-        return gaji
+        gajiTotal = int(jam * 15000)
+    
+    return gajiTotal
 
 
 def tabungan(pengeluaran, gaji):
+    pesan = ""
+
     if pengeluaran > gaji:
-        return "Namun pengeluaran anda lebih besar daripada pendapatan sebanyak Rp" + str(-(gaji - pengeluaran)) + ". Sebaiknya anda mencari tambahan pekerjaan lain."
+        pesan = "Namun pengeluaran anda lebih besar daripada pendapatan sebanyak Rp" + str(-(gaji - pengeluaran)) + ". Sebaiknya anda mencari tambahan pekerjaan lain."
     elif pengeluaran == gaji:
-        return "Pengeluaran dan pendapatan anda sama besar sehingga anda tidak dapat menabung."
+        pesan = "Pengeluaran dan pendapatan anda sama besar sehingga anda tidak dapat menabung."
     else:
-        return "Pendapatan anda melebihi pengeluaran anda sehingga anda dapat menabung sebesar Rp" + str(gaji - pengeluaran) + " tiap minggunya."
+        pesan = "Pendapatan anda melebihi pengeluaran anda sehingga anda dapat menabung sebesar Rp" + str(gaji - pengeluaran) + " tiap minggunya."
+    
+    return pesan
 
 # Main Program
 while True:
